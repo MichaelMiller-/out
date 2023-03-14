@@ -48,11 +48,11 @@ Max Mustermann, ****, 1, 45678
 Currently, only the [Clang compiler supports](https://gcc.godbolt.org/z/sns8e3Eoo) the [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) in a branch. I have tested the following compilers with **out**. 
 
 
-| Compiler | Version | |
-|---|---|---|
-| Clang | 12.2 | &cross; |
-| GCC | 15.0 | &cross; |
-| MSVC (cl.exe) | 19.33 | &cross; |
+| Compiler | Version | Works |
+|---|---|------------|
+| Clang | 12.2 | &cross;    |
+| GCC | 15.0 | &cross;    |
+| MSVC (cl.exe) | 19.33 | &cross;    |
 | Intel | | not tested |
 
 
@@ -77,7 +77,7 @@ With the help of this header, any object can be output as [JSON](https://en.wiki
 - [std::filesystem::path](https://en.cppreference.com/w/cpp/filesystem/path)
 - [Sequence containers](https://en.cppreference.com/w/cpp/container)
 
-If a special format for custom types is desired. The [value_formatter](include/out/value_formatter.h) class can be specialised for this. 
+If a special format for a custom type is desired. The [value_formatter](include/out/value_formatter.h) class should be specialised. 
 
 For example, your data structure has a [boost::uuid](https://www.boost.org/doc/libs/1_81_0/libs/uuid/doc/uuid.html) as a member and you want to display this as a string in the JSON object. Then the template specialisation could look like this:
 
