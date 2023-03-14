@@ -16,7 +16,7 @@ namespace out
       requires std::is_class_v<T>
    class json_object
    {
-      Class obj;
+      T obj;
       std::size_t index{0};
       std::string file_content{};
 
@@ -35,7 +35,7 @@ namespace out
       {
          namespace reflect = std::experimental::reflect;
 
-         using reflection_t = reflexpr(Class);
+         using reflection_t = reflexpr(T);
          using members_t = reflect::get_public_data_members_t<reflection_t>;
 
          constexpr auto members =
@@ -49,7 +49,7 @@ namespace out
       }
 
     public:
-      explicit json_object(Class object) : obj{std::move(object)}, file_content{generate_content()} {}
+      explicit json_object(T object) : obj{std::move(object)}, file_content{generate_content()} {}
 
       [[nodiscard]] auto content() const noexcept { return file_content; }
    };
