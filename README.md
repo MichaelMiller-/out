@@ -1,6 +1,6 @@
 # out
 
-**out** is a small library to output arbitrary data-structures in various formats without additional serializer code. The [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) is used for this purpose.
+**out** is a small header-only library to output arbitrary data-structures in various formats without additional serializer code. The [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) is used for this purpose.
 
 ## Overview
 
@@ -75,7 +75,7 @@ With the help of this header, any object can be output as [JSON](https://en.wiki
 - [std::string](https://en.cppreference.com/w/cpp/string/basic_string)
 - [std::optional](https://en.cppreference.com/w/cpp/utility/optional)
 - [std::filesystem::path](https://en.cppreference.com/w/cpp/filesystem/path)
-
+- [Sequence containers](https://en.cppreference.com/w/cpp/container)
 
 If a special format for custom types is desired. The [value_formatter](include/out/value_formatter.h) class can be specialised for this. 
 
