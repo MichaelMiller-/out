@@ -45,7 +45,7 @@ Max Mustermann, ****, 1, 45678
 
 ## Supported compiler
 
-Currently, only the [Clang compiler supports](https://gcc.godbolt.org/z/sns8e3Eoo) the [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) in a branch. I have tested the following compilers with **out**. 
+Currently, only the [Clang compiler](https://gcc.godbolt.org/z/sns8e3Eoo) supports the [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) in a branch. I have tested the following compilers with **out**. 
 
 
 | Compiler      | Version | Works      |
@@ -70,7 +70,7 @@ Write a [sequence-container](https://en.cppreference.com/w/cpp/container) of arb
 
 With the help of this header, any object can be output as [JSON](https://en.wikipedia.org/wiki/JSON). A number of data types are supported.
 
-- any [arithmetic type](https://en.cppreference.com/w/cpp/types/is_arithmetic)
+- [arithmetic types](https://en.cppreference.com/w/cpp/types/is_arithmetic)
 - [enum](https://en.cppreference.com/w/c/language/enum)
 - [std::string](https://en.cppreference.com/w/cpp/string/basic_string)
 - [std::optional](https://en.cppreference.com/w/cpp/utility/optional)
