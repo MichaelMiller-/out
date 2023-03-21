@@ -1,6 +1,6 @@
 # out
 
-**out** is a small header-only library to output arbitrary data-structures in various formats without additional serializer code. The [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) is used for this purpose.
+***out*** is a small header-only library to output arbitrary data-structures in various formats without additional serializer code. The [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect) is used for this purpose.
 
 ## Overview
 
@@ -77,7 +77,7 @@ With the help of this header, any object can be output as [JSON](https://en.wiki
 - [std::filesystem::path](https://en.cppreference.com/w/cpp/filesystem/path)
 - [Sequence containers](https://en.cppreference.com/w/cpp/container)
 
-If a special format for a custom type is desired. The [value_formatter](include/out/value_formatter.h) class should be specialised. 
+If a special format for a custom type is desired. The [value_formatter](include/out/json/value_formatter.h) class should be specialised. 
 
 For example, your data structure has a [boost::uuid](https://www.boost.org/doc/libs/1_81_0/libs/uuid/doc/uuid.html) as a member and you want to display this as a string in the JSON object. Then the template specialisation could look like this:
 
@@ -89,7 +89,7 @@ For example, your data structure has a [boost::uuid](https://www.boost.org/doc/l
 #include <out/json.h>
 
 template <>
-struct out::value_formatter<boost::uuids::uuid>
+struct out::json::value_formatter<boost::uuids::uuid>
 {
     static void apply(std::ostream& os, boost::uuids::uuid const& value)
     {
@@ -109,3 +109,31 @@ int main()
     return 0;
 }
 ```
+
+---
+### SQL Statements
+*#include [<out/sql/insert_into.h>](include/out/sql/insert_into.h)*
+
+Generate SQL statements with the help of the [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect). The [INSERT](https://www.w3schools.com/sql/sql_insert.asp) statement was implemented as the first example. 
+A [customisation point](include/out/sql/value_formatter.h) for own types is also implemented here. The functional principle is analogous to the [json/value_formatter](include/out/json/value_formatter.h).
+
+```cpp
+struct user
+{
+   std::string name{};
+   std::string password{};
+   double cash{};
+   int karma{};
+};
+
+int main()
+{
+    user obj{ .name="John Doe", .password="hidden", .cash = 3.14, .karma = 42 };
+    std::cout << out::sql::insert_into(obj) << std::endl;
+    return 0;
+}
+// prints: 
+// INSERT INTO user (name,password,cash,karma) VALUES ('John Doe','hidden',3.14,42);
+```
+
+

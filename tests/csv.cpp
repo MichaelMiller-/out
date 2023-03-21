@@ -10,7 +10,7 @@ struct user
    double cash{};
 };
 
-TEST_CASE("write CSV output", "[out]")
+TEST_CASE("write CSV output", "[out][csv]")
 {
 #if __cpp_lib_reflection >= 201902
    std::vector<user> users{

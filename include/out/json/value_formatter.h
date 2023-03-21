@@ -1,8 +1,8 @@
 #pragma once
 
-#include <out/json_object_fwd.h>
-#include <out/value_formatter_fwd.h>
 #include <out/enum_to_string.h>
+#include <out/json/object_fwd.h>
+#include <out/json/value_formatter_fwd.h>
 
 #include <algorithm>
 #include <filesystem>
@@ -11,7 +11,7 @@
 #include <ostream>
 #include <type_traits>
 
-namespace out
+namespace out::json
 {
    template <typename T, typename>
    struct value_formatter
@@ -19,7 +19,7 @@ namespace out
       static void apply(std::ostream& os, T const& value)
       {
          if constexpr (std::is_class_v<T>) {
-            os << json_object{value};
+            os << object{value};
          } else {
             os << value;
          }
@@ -95,4 +95,4 @@ namespace out
          os << ']';
       }
    };
-} // namespace out
+} // namespace out::json

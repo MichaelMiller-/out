@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include <out/json.h>
+#include <out/json/object.h>
 
 struct user
 {
@@ -10,7 +10,7 @@ struct user
    double cash{};
 };
 
-TEST_CASE("write JSON output", "[out][json]")
+TEST_CASE("generate JSON object", "[out][json]")
 {
 #if __cpp_lib_reflection >= 201902
    //! \todo

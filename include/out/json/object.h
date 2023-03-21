@@ -10,11 +10,11 @@
 #include <string>
 #include <type_traits>
 
-namespace out
+namespace out::json
 {
    template <typename T>
       requires std::is_class_v<T>
-   class json_object
+   class object
    {
       T obj;
       std::size_t index{0};
@@ -55,7 +55,7 @@ namespace out
    };
 
    template <typename T>
-   std::ostream& operator<<(std::ostream& os, json_object<T> const& obj)
+   std::ostream& operator<<(std::ostream& os, object<T> const& obj)
    {
       return os << obj.content();
    }

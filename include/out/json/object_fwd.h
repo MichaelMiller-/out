@@ -2,9 +2,9 @@
 
 #include <type_traits>
 
-namespace out
+namespace out::json
 {
    template <typename T>
       requires std::is_class_v<T>
-   class json_object;
+   class object;
 }
