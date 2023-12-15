@@ -3,8 +3,7 @@
 #if __has_include(<experimental/reflect>)
 //! \todo #if __cpp_lib_reflection >= 201902
 
-#include <out/make_object_sequence.h>
-
+#include <algorithm>
 #include <array>
 #include <experimental/reflect>
 #include <functional>
@@ -29,13 +28,15 @@ namespace out
          using reflection_t = reflexpr(T);
          using enumerators_t = std::experimental::reflect::get_enumerators_t<reflection_t>;
 
-         return make_object_sequence_array<constant_and_name, enumerators_t>(
-            std::make_index_sequence<std::experimental::reflect::get_size_v<enumerators_t>>{});
+         return []<auto... Is>(std::index_sequence<Is...>) {
+            return std::array{
+               detail::constant_and_name<std::experimental::reflect::get_element_t<Is, enumerators_t>>::value...};
+         }(std::make_index_sequence<std::experimental::reflect::get_size_v<enumerators_t>>{});
       }
    } // namespace detail
 
    template <typename T>
-   [[nodiscard]] constexpr auto to_string(T value) noexcept
+   [[nodiscard]] constexpr auto to_string(T value) noexcept -> std::string_view
       requires std::is_enum_v<T>
    {
       constexpr auto values = detail::enum_lookup<T>();
@@ -44,7 +45,7 @@ namespace out
    }
 
    template <typename T, typename Compare = std::equal_to<>>
-   [[nodiscard]] constexpr auto to_enum(std::string_view value)
+   [[nodiscard]] constexpr auto to_enum(std::string_view value) -> T
       requires std::is_enum_v<T>
    {
       constexpr auto values = detail::enum_lookup<T>();
