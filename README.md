@@ -50,8 +50,8 @@ Currently, only the [Clang compiler](https://gcc.godbolt.org/z/sns8e3Eoo) suppor
 
 | Compiler      | Version | Works      |
 |---------------|---------|------------|
-| Clang         | 12.2    | &cross;    |
-| GCC           | 15.0    | &cross;    |
+| Clang         | 13.2    | &cross;    |
+| GCC           | 17.0    | &cross;    |
 | MSVC (cl.exe) | 19.33   | &cross;    |
 | Intel         | -       | not tested |
 
@@ -136,4 +136,59 @@ int main()
 // INSERT INTO user (name,password,cash,karma) VALUES ('John Doe','hidden',3.14,42);
 ```
 
+## enum_to_string
+*#include [<out/enum_to_string.h>](include/out/enum_to_string.h)*
 
+There is a small helper to get rid of tedious code that every one of us has written many times. A ```to_string``` function for every enumeration. Basically the code looks like this:  
+
+```cpp
+enum class DaysOfTheWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };
+
+[[nodiscard]] constexpr auto to_string(DaysOfTheWeek value) -> std::string_view
+{
+   if (value == DaysOfTheWeek::Monday) {
+    return "Monday";
+   }
+   // missing control path DaysOfTheWeek::Tuesday!
+   if (value == DaysOfTheWeek::Wednesday) {
+    return "Wednesday";
+   }
+   if (value == DaysOfTheWeek::Thursday) {
+    return "Thurdsay"; // typo!
+   }
+   if (value == DaysOfTheWeek::Friday) {
+    return "Friday";
+   }
+   if (value == DaysOfTheWeek::Saturday) {
+    return "Saturday";
+   }
+   if (value == DaysOfTheWeek::Sunday) {
+    return "Sunday";
+   }
+   // of course this control path can never be used, but the compiler warnings you about a missing return value.
+   return "There is obvious no meaningful value!";
+}
+
+int main()
+{
+    auto value = DaysOfTheWeek::Thursday;
+    std::cout << "value: " << to_string(value) << std::endl;
+}
+```
+It is pretty clear that this code has some issues with typo's, extensibility and missing or invalid control paths.
+The helper function ```ènum_to_string``` takes care of all this problems. It generates a compile-time-lookup table using reflection of all elements in the enumeration and return name of the element.  
+Simply include the header and use the functions ```to_string``` and ```to_enum```. 
+
+```cpp
+<out/enum_to_string.h>
+
+enum class DaysOfTheWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday };
+
+int main()
+{
+    auto value = DaysOfTheWeek::Thursday;
+    std::cout << "value: " << out::to_string(value) << std::endl;
+}
+```
+
+Live example on Compiler Explorer: https://gcc.godbolt.org/z/xvvzen5zr
