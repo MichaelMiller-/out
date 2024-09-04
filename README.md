@@ -50,8 +50,10 @@ Currently, only the [Clang compiler](https://gcc.godbolt.org/z/sns8e3Eoo) suppor
 
 | Compiler      | Version | Works      |
 |---------------|---------|------------|
-| Clang         | 13.2    | &cross;    |
-| GCC           | 17.0    | &cross;    |
+| GCC           | 13.2    | &cross;    |
+|            | 14.1    | &cross;    |
+| Clang         | 17.0    | &cross;    |
+|          | 17.2    | &cross;    |
 | MSVC (cl.exe) | 19.33   | &cross;    |
 | Intel         | -       | not tested |
 
@@ -68,7 +70,7 @@ Write a [sequence-container](https://en.cppreference.com/w/cpp/container) of arb
 ### Json
 *#include [<out/json.h>](include/out/json.h)*
 
-With the help of this header, any object can be output as [JSON](https://en.wikipedia.org/wiki/JSON). A number of data types are supported.
+With the help of this header, any object can be outputted as [JSON](https://en.wikipedia.org/wiki/JSON). A number of data types are supported.
 
 - [arithmetic types](https://en.cppreference.com/w/cpp/types/is_arithmetic)
 - [enum](https://en.cppreference.com/w/c/language/enum)
@@ -77,7 +79,7 @@ With the help of this header, any object can be output as [JSON](https://en.wiki
 - [std::filesystem::path](https://en.cppreference.com/w/cpp/filesystem/path)
 - [Sequence containers](https://en.cppreference.com/w/cpp/container)
 
-If a special format for a custom type is desired. The [value_formatter](include/out/json/value_formatter.h) class should be specialised. 
+If a special format for a custom type is desired. The [json_serializer](include/out/json_serializer.h) class should be specialised. 
 
 For example, your data structure has a [boost::uuid](https://www.boost.org/doc/libs/1_81_0/libs/uuid/doc/uuid.html) as a member and you want to display this as a string in the JSON object. Then the template specialisation could look like this:
 
@@ -89,7 +91,7 @@ For example, your data structure has a [boost::uuid](https://www.boost.org/doc/l
 #include <out/json.h>
 
 template <>
-struct out::json::value_formatter<boost::uuids::uuid>
+struct out::json_serializer<boost::uuids::uuid>
 {
     static void apply(std::ostream& os, boost::uuids::uuid const& value)
     {
@@ -115,7 +117,7 @@ int main()
 *#include [<out/sql/insert_into.h>](include/out/sql/insert_into.h)*
 
 Generate SQL statements with the help of the [Reflection TS](https://en.cppreference.com/w/cpp/experimental/reflect). The [INSERT](https://www.w3schools.com/sql/sql_insert.asp) statement was implemented as the first example. 
-A [customisation point](include/out/sql/value_formatter.h) for own types is also implemented here. The functional principle is analogous to the [json/value_formatter](include/out/json/value_formatter.h).
+A [customisation point](include/out/sql/value_formatter.h) for own types is also implemented here. The functional principle is analogous to the [json_serializer](include/out/json_serializer.h).
 
 ```cpp
 struct user

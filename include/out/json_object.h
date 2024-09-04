@@ -1,20 +1,20 @@
 #pragma once
 
+#include <type_traits>
+
 #if __has_include(<experimental/reflect>)
 // #if __cpp_lib_reflection >= 201902
 
 #include <out/make_object_sequence.h>
-#include <out/value_formatter.h>
+#include <out/value_formatter_fwd.h>
 
 #include <experimental/reflect>
-#include <string>
-#include <type_traits>
 
-namespace out::json
+namespace out
 {
    template <typename T>
       requires std::is_class_v<T>
-   class object
+   class json_object
    {
       T obj;
       std::size_t index{0};
@@ -55,7 +55,7 @@ namespace out::json
    };
 
    template <typename T>
-   std::ostream& operator<<(std::ostream& os, object<T> const& obj)
+   std::ostream& operator<<(std::ostream& os, json_object<T> const& obj)
    {
       return os << obj.content();
    }

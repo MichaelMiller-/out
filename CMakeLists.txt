@@ -1,18 +1,31 @@
 cmake_minimum_required(VERSION 3.23)
 project(out VERSION 1.0.0)
 
-include(CTest)
-## TODO: CDash integration: page 316
-
 ## Header-only library
 add_library(out INTERFACE)
 ## Alias
 add_library(out::out ALIAS out)
 
-target_compile_features(out INTERFACE cxx_std_20)
+target_include_directories(out INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+        $<INSTALL_INTERFACE:include>)
 
-target_include_directories(out INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_sources(out INTERFACE
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/sql/insert_into.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/sql/value_formatter.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/sql/value_formatter_fwd.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/concat.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/csv.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/enum_to_string.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/json.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/json_object.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/json_object_fwd.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/json_serializer.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/json_serializer_fwd.h
+        # ${CMAKE_CURRENT_LIST_DIR}/include/out/make_object_sequence.h
+)
 
+include(CTest)
 if (BUILD_TESTING) # option is created by CTest
     enable_testing()
     add_subdirectory(tests)
@@ -29,7 +42,7 @@ endif()
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(TARGETS out
         EXPORT outExportTarget

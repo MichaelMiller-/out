@@ -8,7 +8,7 @@ namespace out
 {
    template <typename T>
       requires std::is_class_v<T>
-   inline auto json(T const& value)
+   [[nodiscard]] constexpr auto json(T const& value)
    {
       return json_object{value};
    }

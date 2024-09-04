@@ -1,7 +1,7 @@
 #pragma once
 
-namespace out::json
+namespace out
 {
    template <typename T, typename = void>
-   struct value_formatter;
+   struct json_serializer;
 }

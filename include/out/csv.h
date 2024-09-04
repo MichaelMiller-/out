@@ -1,5 +1,8 @@
 #pragma once
 
+#include <concepts>
+#include <string>
+
 #if __has_include(<experimental/reflect>)
 //! \todo #if __cpp_lib_reflection >= 201902
 
@@ -44,7 +47,7 @@ namespace out
 
     public:
       template <typename Iterator>
-      explicit csv_file(Iterator first, Iterator last)
+      constexpr explicit csv_file(Iterator first, Iterator last)
           : file_content{generate_content<typename std::iterator_traits<Iterator>::value_type>(first, last)}
       {
       }
@@ -55,13 +58,12 @@ namespace out
    std::ostream& operator<<(std::ostream& os, csv_file const& obj) { return os << obj.content(); }
 
    template <typename Iterator>
-   inline auto csv(Iterator first, Iterator last)
+   [[nodiscard]] auto csv(Iterator first, Iterator last)
    {
       return csv_file{first, last};
    }
 
-   template <typename Container>
-   inline auto csv(Container const& container)
+   [[nodiscard]] auto csv(std::ranges::range auto const& container)
    {
       return csv_file{begin(container), end(container)};
    }

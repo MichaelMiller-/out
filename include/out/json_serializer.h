@@ -1,8 +1,8 @@
 #pragma once
 
 #include <out/enum_to_string.h>
-#include <out/json/object_fwd.h>
-#include <out/json/value_formatter_fwd.h>
+#include <out/json_object_fwd.h>
+#include <out/json_serializer_fwd.h>
 
 #include <algorithm>
 #include <filesystem>
@@ -11,15 +11,15 @@
 #include <ostream>
 #include <type_traits>
 
-namespace out::json
+namespace out
 {
    template <typename T, typename>
-   struct value_formatter
+   struct json_serializer
    {
       static void apply(std::ostream& os, T const& value)
       {
          if constexpr (std::is_class_v<T>) {
-            os << object{value};
+            os << json_object{value};
          } else {
             os << value;
          }
@@ -28,59 +28,59 @@ namespace out::json
 
    template <typename T>
       requires std::is_enum_v<T>
-   struct value_formatter<T>
+   struct json_serializer<T>
    {
       static void apply(std::ostream& os, T const& value) { os << to_string(value); }
    };
 
    template <>
-   struct value_formatter<std::string>
+   struct json_serializer<std::string>
    {
       static void apply(std::ostream& os, std::string const& value) { os << std::quoted(value); }
    };
 
    template <>
-   struct value_formatter<bool>
+   struct json_serializer<bool>
    {
       static void apply(std::ostream& os, bool value) { os << std::boolalpha << value; }
    };
 
    template <>
-   struct value_formatter<char>
+   struct json_serializer<char>
    {
       static void apply(std::ostream& os, char value) { os << static_cast<int>(value); }
    };
 
    template <>
-   struct value_formatter<unsigned char>
+   struct json_serializer<unsigned char>
    {
       static void apply(std::ostream& os, unsigned char value) { os << static_cast<int>(value); }
    };
 
    template <typename T>
-   struct value_formatter<std::optional<T>>
+   struct json_serializer<std::optional<T>>
    {
       static void apply(std::ostream& os, std::optional<T> const& value)
       {
          if (value == std::nullopt) {
             os << "null";
          } else {
-            value_formatter<T>::apply(os, *value);
+            json_serializer<T>::apply(os, *value);
          }
       }
    };
 
    template <>
-   struct value_formatter<std::filesystem::path>
+   struct json_serializer<std::filesystem::path>
    {
       static void apply(std::ostream& os, std::filesystem::path const& value)
       {
-         value_formatter<decltype(value.string())>::apply(os, value.string());
+         json_serializer<decltype(value.string())>::apply(os, value.string());
       }
    };
 
    template <typename T>
-   struct value_formatter<
+   struct json_serializer<
       T, std::void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end()), typename T::value_type>>
    {
       static void apply(std::ostream& os, T const& container)
@@ -90,9 +90,9 @@ namespace out::json
             if (index++ > 0) {
                os << ",";
             }
-            value_formatter<typename T::value_type>::apply(os, elem);
+            json_serializer<typename T::value_type>::apply(os, elem);
          });
          os << ']';
       }
    };
-} // namespace out::json
+} // namespace out
